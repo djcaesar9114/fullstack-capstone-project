@@ -1,45 +1,41 @@
-router.get('/', async (req, res) => {
+const express = require('express');
+const router = express.Router();
+const connectToDatabase = require('../models/db');
+const logger = require('../logger');
+
+// Get all gifts
+router.get('/', async (req, res, next) => {
+    logger.info('/ called');
     try {
-        // Task 1: Connect to MongoDB
         const db = await connectToDatabase();
 
-        // Task 2: Récupérer la collection "gifts"
         const collection = db.collection("gifts");
-
-        // Task 3: Récupérer tous les cadeaux et convertir en tableau JSON
         const gifts = await collection.find({}).toArray();
-
-        // Task 4: Retourner les cadeaux
         res.json(gifts);
     } catch (e) {
-        console.error('Error fetching gifts:', e);
-        res.status(500).send('Error fetching gifts');
+        logger.console.error('oops something went wrong', e)
+        next(e);
     }
 });
 
-router.get('/:id', async (req, res) => {
+// Get a single gift by ID
+router.get('/:id', async (req, res, next) => {
     try {
-        // Task 1: Connect to MongoDB
         const db = await connectToDatabase();
-
-        // Task 2: Récupérer la collection "gifts"
         const collection = db.collection("gifts");
-
-        const id = parseInt(req.params.id); // Assurez-vous que l'ID est bien un nombre
-
-        // Task 3: Trouver le cadeau correspondant à l'ID
+        const id = req.params.id;
         const gift = await collection.findOne({ id: id });
 
         if (!gift) {
-            return res.status(404).send('Gift not found');
+            return res.status(404).send("Gift not found");
         }
 
         res.json(gift);
     } catch (e) {
-        console.error('Error fetching gift:', e);
-        res.status(500).send('Error fetching gift');
+        next(e);
     }
 });
+
 
 // Add a new gift
 router.post('/', async (req, res, next) => {
