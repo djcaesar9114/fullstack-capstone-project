@@ -1,5 +1,6 @@
 import React from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar/Navbar';
 import DetailsPage from './components/DetailsPage/DetailsPage';
 import SearchPage from './components/SearchPage/SearchPage';
 import MainPage from './components/MainPage/MainPage';
@@ -8,9 +9,8 @@ import RegisterPage from './components/RegisterPage/RegisterPage';
 import Profile from './components/Profile/Profile';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import Navbar from './components/Navbar/Navbar';
+
 function App() {
-  const navigate = useNavigate();
   return (
         <>
         <Navbar/>
